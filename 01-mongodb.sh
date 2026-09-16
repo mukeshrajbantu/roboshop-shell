@@ -32,3 +32,6 @@ VALIDATE $? "Adding Mongo repo" #if the copying is been failed then $? will be n
 
 dnf install mongodb-org -y &>> $LOGS_FILE 
 VALIDATE $? "Installing MongoDB"
+
+systemctl enable --now mongod #enables and starts.
+VALIDATE $? "Starting and enabling MongoDB"
