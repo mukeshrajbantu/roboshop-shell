@@ -30,5 +30,5 @@ VALIDATE(){
 cp mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Adding Mongo repo" #if the copying is been failed then $? will be non zero whereas adding mongo failure.
 
-dnf install mongodb-org -y &>> &LOGS_FILE 
+dnf install mongodb-org -y &>> $LOGS_FILE 
 VALIDATE $? "Installing MongoDB"
