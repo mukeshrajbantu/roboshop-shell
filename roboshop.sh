@@ -8,23 +8,22 @@ DOMAIN_NAME="raj03.sbs"   #repalce with your domain name
 
 for instance in $@
 do
-    echo "Launching instance: $instance"    
-    INSTANCE_ID=$(aws ec2 run-instances \       #creating instances
-        --image-id ami-0220d79f3f480ecf5 \          #taking the image id
+    echo "Launching instance: $instance"
+    INSTANCE_ID=$(aws ec2 run-instances \ 
+        --image-id ami-0220d79f3f480ecf5 \
         --instance-type t3.micro \
-        --security-groups "roboshop-common" "roboshop-$instance" \  #security group name.
+        --security-groups "roboshop-common" "roboshop-$instance" \ 
         --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=roboshop-$instance}]" \
-        --query 'Instances[0].InstanceId' \         #InstanceId is standard OUTPUT, it won't change. 
-        --output text                               #search: aws cli launch instance and get instance id.
-
+        --query 'Instances[0].InstanceId' \
+        --output text
     )
     
     echo "Instance ID: $INSTANCE_ID"
 
     if [ $instance == "frontend" ]; then
-    IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID \       #search:aws cli to describe instance ip address. 
+    IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID \
         --query 'Reservations[*].Instances[*].PublicIpAddress' \
-        --output text   
+        --output text
         R53_RECORD="$DOMAIN_NAME"
         
         
