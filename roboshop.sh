@@ -9,7 +9,8 @@ DOMAIN_NAME="raj03.sbs"   #repalce with your domain name
 for instance in $@
 do
     echo "Launching instance: $instance"
-    INSTANCE_ID=$(aws ec2 run-instances \ 
+    INSTANCE_ID=$(aws ec2 run-instances \
+     
         --image-id ami-0220d79f3f480ecf5 \
         --instance-type t3.micro \
         --security-groups "roboshop-common" "roboshop-$instance" \ 
@@ -17,7 +18,6 @@ do
         --query 'Instances[0].InstanceId' \
         --output text
     )
-    
     echo "Instance ID: $INSTANCE_ID"
 
     if [ $instance == "frontend" ]; then
