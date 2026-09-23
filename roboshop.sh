@@ -22,18 +22,17 @@ do
         --query 'Reservations[*].Instances[*].PublicIpAddress' \
         --output text
         R53_RECORD="$DOMAIN_NAME"
-        
-        
         )
     else
     IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID \
         --query 'Reservations[*].Instances[*].PrivateIpAddress' \
         --output text 
         R53_RECORD="$instance.$DOMAIN_NAME"
+        )
     fi
 
     #### UPDATING ROUTE53 RECORDS #####
-    
+
     aws route53 change-resource-record-sets \
     --hosted-zone-id "$ZONE_ID" \
     --change-batch '
