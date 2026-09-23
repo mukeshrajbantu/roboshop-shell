@@ -8,10 +8,6 @@ DOMAIN_NAME="raj03.sbs"   #repalce with your domain name
 
 for instance in $@
 do
-    #1.Instance lauch, 2.creating route53 records,
-    #get the IP address, if frontend, we need pubilc,
-    #ex: raj03.sbs -> frontend public ip
-    #else, component-name.raj03.sbs -> private ip.
     echo "Launching instance: $instance"    
     INSTANCE_ID=$(aws ec2 run-instances \       #creating instances
         --image-id ami-0220d79f3f480ecf5 \          #taking the image id
