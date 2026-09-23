@@ -2,7 +2,7 @@
 
 AMI_ID="ami-0220d79f3f480ecf5"
 ZONE_ID="Z076627518YDYQ0034ZJQ"   #repalce with zone id
-DOMAIN_NAME=raj03.sbs   #repalce with your domain name
+DOMAIN_NAME="raj03.sbs"   #repalce with your domain name
 
 
 
@@ -18,21 +18,22 @@ do
         --instance-type t3.micro \
         --security-groups "roboshop-common" "roboshop-$instance" \  #security group name.
         --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=roboshop-$instance}]" \
-        --query "Instances[0].InstanceId" \         #InstanceId is standard OUTPUT, it won't change. 
+        --query 'Instances[0].InstanceId' \         #InstanceId is standard OUTPUT, it won't change. 
         --output text                               #search: aws cli launch instance and get instance id.
 
     )
+    
     echo "Instance ID: $INSTANCE_ID"
 
     if [ $instance == "frontend" ]; then
     IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID \       #search:aws cli to describe instance ip address. 
-        --query "Reservations[*].Instances[*].PublicIpAddress" \
+        --query 'Reservations[*].Instances[*].PublicIpAddress' \
         --output text   
         R53_RECORD="$DOMAIN_NAME"
         )
     else
     IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID \
-        --query "Reservations[*].Instances[*].PrivateIpAddress" \
+        --query 'Reservations[*].Instances[*].PrivateIpAddress' \
         --output text 
         R53_RECORD="$instance.$DOMAIN_NAME"     #EX: if mongodb then mongodb.raj03.sbs
         )
@@ -51,7 +52,7 @@ do
                     "ResourceRecordSet": {
                         "Name": "'$R53_RECORD'",
                         "Type": "A",
-                        "TTL": 300,
+                        "TTL": 1,
                         "ResourceRecords": [
                             {
                                 "Value": "'$IP'"
