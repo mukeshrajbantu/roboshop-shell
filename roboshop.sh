@@ -1,15 +1,14 @@
 #!/bin/bash
 
 AMI_ID="ami-0220d79f3f480ecf5"
-ZONE_ID="Z076627518YDYQ0034ZJQ"   #repalce with zone id
-DOMAIN_NAME="raj03.sbs"   #repalce with your domain name
+ZONE_ID="Z076627518YDYQ0034ZJQ"   # replace with zone id
+DOMAIN_NAME="raj03.sbs"   # replace with your domain name
 
 for instance in $@
 do
     echo "Launching instance: $instance"
     INSTANCE_ID=$(aws ec2 run-instances \
-
-        --image-id ami-0220d79f3f480ecf5 \
+         --image-id ami-0220d79f3f480ecf5 \
         --instance-type t3.micro \
         --security-groups "roboshop-common" "roboshop-$instance" \ 
         --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=roboshop-$instance}]" \
@@ -30,12 +29,11 @@ do
     IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID \
         --query 'Reservations[*].Instances[*].PrivateIpAddress' \
         --output text 
-        R53_RECORD="$instance.$DOMAIN_NAME"     #EX: if mongodb then mongodb.raj03.sbs
-        )
+        R53_RECORD="$instance.$DOMAIN_NAME"
     fi
 
     #### UPDATING ROUTE53 RECORDS #####
-    #search: aws cli to update route 53 record.
+    
     aws route53 change-resource-record-sets \
     --hosted-zone-id "$ZONE_ID" \
     --change-batch '
